@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- SMART CACHE CONTROL -->
+    <meta http-equiv="Cache-Control" content="no-cache, public, must-revalidate" />
+    <title>Answer Vault - Cinematic Trailer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+            perspective: 2000px;
+        }
+
+        /* Starfield Background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+
+        /* 3D Container */
+        .scene {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            transform-style: preserve-3d;
+            z-index: 10;
+            opacity: 0;
+            /* Hidden initially */
+        }
+
+        /* Browser Window Mockup */
+        .browser-window {
+            width: 100%;
+            height: 100%;
+            background: #0f1419;
+            border-radius: 12px;
+            box-shadow:
+                0 0 50px rgba(0, 212, 255, 0.1),
+                0 0 100px rgba(0, 212, 255, 0.05),
+                0 20px 60px rgba(0, 0, 0, 0.8);
+            position: absolute;
+            transform-style: preserve-3d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .browser-bar {
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+        }
+
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background: #ff5f56;
+        }
+
+        .dot-yellow {
+            background: #ffbd2e;
+        }
+
+        .dot-green {
+            background: #27c93f;
+        }
+
+        .browser-content {
+            height: calc(100% - 40px);
+            background: #0b0f13;
+            position: relative;
+        }
+
+        /* Iframe to load real site */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Text Overlays */
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8vw;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.2;
+            /* Better line height */
+            white-space: nowrap;
+            z-index: 50;
+            opacity: 0;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            will-change: transform, opacity;
+            /* Performance Hint */
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, #b0b8c1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .accent-text {
+            background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Feature Cards (Floating) */
+        .feature-card {
+            position: absolute;
+            background: rgba(15, 20, 25, 0.9);
+            width: 300px;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            z-index: 60;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Glow effects */
+        .glow-orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .finale-screen {
+            position: fixed;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: #000;
+            z-index: 999;
+            padding: 3rem;
+            will-change: opacity, transform;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .finale-screen>* {
+            flex-shrink: 0;
+            will-change: transform, opacity;
+            margin-bottom: 2rem;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #betaNote {
+            max-width: 800px;
+            margin-top: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Progress Bar */
+        .progress-line {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: #22d3ee;
+            width: 0%;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars"></div>
+    <div class="glow-orb"></div>
+    <!-- Intro Text -->
+    <div class="overlay-text" id="text1">Simple</div>
+    <div class="overlay-text" id="text2">Powerful</div>
+    <div class="overlay-text" id="text3"><span class="accent-text">Reimagined</span></div>
+
+    <!-- Cinematic Introducing Slide -->
+    <div class="overlay-text z-[60]" id="text4" style="opacity: 0;">
+        <span
+            class="block text-transparent text-6xl md:text-9xl font-black tracking-[1.5rem] bg-clip-text bg-gradient-to-t from-gray-600 to-white"
+            style="-webkit-text-stroke: 1px rgba(255,255,255,0.2);">
+            INTRODUCING
+        </span>
+    </div>
+
+    <!-- The 3D Browser Scene -->
+    <div class="scene" id="browserScene">
+        <!-- Reflection effect -->
+        <div
+            class="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-blue-500/10 pointer-events-none rounded-xl z-20 mix-blend-overlay">
+        </div>
+
+        <div class="browser-window">
+            <div class="browser-bar">
+                <div class="browser-dot dot-red"></div>
+                <div class="browser-dot dot-yellow"></div>
+                <div class="browser-dot dot-green"></div>
+                <div class="ml-4 px-3 py-1 bg-white/5 rounded-md text-sm text-gray-400 w-72 flex items-center">
+                    <i class="fas fa-lock mr-2 text-xs"></i> answervault.great-site.net
+                </div>
+            </div>
+            <div class="browser-content">
+                <iframe src="/index.php" id="siteFrames"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Features - Centered & Larger & More -->
+
+    <!-- 1. Search -->
+    <div class="feature-card items-center text-center flex flex-col justify-center" id="feat1"
+        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); opacity: 0;">
+        <div class="text-5xl mb-4 text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]"><i class="fas fa-bolt"></i>
+        </div>
+        <h3 class="text-4xl font-bold text-white mb-2">Lightning Fast</h3>
+        <p class="text-xl text-gray-400">Search instantly.</p>
+    </div>
+
+    <!-- 2. UI -->
+    <div class="feature-card items-center text-center flex flex-col justify-center" id="feat2"
+        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); opacity: 0;">
+        <div class="text-5xl mb-4 text-purple-400 drop-shadow-[0_0_15px_rgba(192,132,252,0.5)]"><i
+                class="fas fa-magic"></i></div>
+        <h3 class="text-4xl font-bold text-white mb-2">Immersive UI</h3>
+        <p class="text-xl text-gray-400">Beautiful Dark Mode.</p>
+    </div>
+
+    <!-- 3. All in One -->
+    <div class="feature-card items-center text-center flex flex-col justify-center" id="feat3"
+        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); opacity: 0;">
+        <div class="text-5xl mb-4 text-pink-400 drop-shadow-[0_0_15px_rgba(244,114,182,0.5)]"><i
+                class="fas fa-layer-group"></i></div>
+        <h3 class="text-4xl font-bold text-white mb-2">All Answers</h3>
+        <p class="text-xl text-gray-400">One Spot. Every Subject.</p>
+    </div>
+
+    <!-- 4. Community (New) -->
+    <div class="feature-card items-center text-center flex flex-col justify-center" id="feat4"
+        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); opacity: 0;">
+        <div class="text-5xl mb-4 text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]"><i
+                class="fas fa-users"></i></div>
+        <h3 class="text-4xl font-bold text-white mb-2">Community Driven</h3>
+        <p class="text-xl text-gray-400">Rated ⭐⭐⭐⭐⭐ by Students.</p>
+    </div>
+
+    <div class="finale-screen" id="finalLogo">
+        <!-- New High-Fidelity 3D Logo matching reference -->
+        <div class="w-32 h-32 md:w-48 md:h-48 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)] mb-8">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Blue Book (Back) -->
+                <rect x="42" y="32" width="48" height="58" rx="6" fill="url(#blueGrad_T)" />
+                <rect x="42" y="78" width="48" height="6" rx="3" fill="#cbd5e1" opacity="0.8" />
+
+                <!-- Pink Book (Middle) -->
+                <rect x="22" y="22" width="48" height="58" rx="6" fill="url(#pinkGrad_T)" />
+                <rect x="22" y="68" width="48" height="6" rx="3" fill="#cbd5e1" opacity="0.8" />
+
+                <!-- Green Book (Front) -->
+                <rect x="2" y="12" width="48" height="58" rx="6" fill="url(#greenGrad_T)" />
+                <rect x="2" y="58" width="48" height="6" rx="3" fill="#cbd5e1" opacity="0.8" />
+
+                <defs>
+                    <linearGradient id="blueGrad_T" x1="42" y1="32" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#38bdf8" />
+                        <stop offset="1" stop-color="#0284c7" />
+                    </linearGradient>
+                    <linearGradient id="pinkGrad_T" x1="22" y1="22" x2="70" y2="80" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fb7185" />
+                        <stop offset="1" stop-color="#e11d48" />
+                    </linearGradient>
+                    <linearGradient id="greenGrad_T" x1="2" y1="12" x2="50" y2="70" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a3e635" />
+                        <stop offset="1" stop-color="#65a30d" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <div class="gradient-text text-5xl md:text-8xl font-black leading-tight">Answer Vault</div>
+        <div
+            class="text-xl md:text-3xl font-light text-cyan-400 tracking-[0.4rem] md:tracking-[0.8rem] uppercase opacity-80">
+            Knowledge Unlocked</div>
+        <div id="typingUrl" class="text-lg md:text-2xl font-mono text-white/50 tracking-widest min-h-[1.5em] mt-2">
+        </div>
+        <div id="betaNote" class="opacity-0 px-6">
+            <div class="text-cyan-500 font-bold uppercase tracking-[0.3rem] text-xs md:text-sm italic mb-4">Beta
+                Prototype</div>
+            <p class="text-gray-400 text-sm md:text-lg leading-relaxed font-light max-w-2xl mx-auto">
+                Answer Vault is still not ready. We are currently populating all subjects. For a complete demonstration
+                of our features and answer
+                formatting, please explore <span class="text-white font-semibold">Standard 9: History lessons.</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const tl = gsap.timeline({ paused: true }); // Pause initially
+
+        // Wait for iframe and window
+        window.addEventListener('load', () => {
+            const iframe = document.getElementById('siteFrames');
+            if (iframe.contentDocument.readyState === 'complete') {
+                tl.play();
+            } else {
+                iframe.onload = () => tl.play();
+            }
+        });
+
+        // ====== SLOW, DRAMATIC START ======
+        tl.to("#text1", { opacity: 1, duration: 0.8, scale: 1.1, ease: "power1.inOut" })
+            .to("#text1", { opacity: 0, duration: 0.4, scale: 1.4, delay: 0.4 })
+
+            .to("#text2", { opacity: 1, duration: 0.8, scale: 1.1, ease: "power1.inOut" })
+            .to("#text2", { opacity: 0, duration: 0.4, scale: 1.4, delay: 0.4 })
+
+            .to("#text3", { opacity: 1, duration: 1, scale: 1.1, ease: "power1.inOut" })
+            .to("#text3", { opacity: 0, duration: 0.4, y: -50, delay: 0.6 })
+
+            .to("#text4", { opacity: 1, duration: 1.5, scale: 1, ease: "power2.out" })
+            .to("#text4", { opacity: 0, duration: 0.4, scale: 1.2, filter: "blur(15px)", delay: 0.4 });
+
+        // ====== EXPLOSIVE REVEAL (Energy Spike!) ======
+        tl.set("#browserScene", { opacity: 1 });
+        tl.fromTo(".browser-window",
+            { scale: 0.3, z: 0, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 1.0, ease: "expo.out" });
+
+        // ====== FAST FEATURE BLITZ (After 2s Pause) ======
+        tl.to("#feat1", { opacity: 1, scale: 1.25, duration: 0.25, ease: "back.out(4)" }, "+=2.0")
+            .to("#feat1", { opacity: 0, scale: 1.5, filter: "blur(10px)", duration: 0.2, delay: 0.5 });
+
+        tl.to("#feat2", { opacity: 1, scale: 1.25, duration: 0.25, ease: "back.out(4)" })
+            .to("#feat2", { opacity: 0, scale: 1.5, filter: "blur(10px)", duration: 0.2, delay: 0.5 });
+
+        tl.to("#feat3", { opacity: 1, scale: 1.25, duration: 0.25, ease: "back.out(4)" })
+            .to("#feat3", { opacity: 0, scale: 1.5, filter: "blur(10px)", duration: 0.2, delay: 0.5 });
+
+        tl.to("#feat4", { opacity: 1, scale: 1.25, duration: 0.25, ease: "back.out(4)" })
+            .to("#feat4", { opacity: 0, scale: 1.5, filter: "blur(10px)", duration: 0.2, delay: 0.5 });
+
+        // ====== FAST ENERGETIC SCROLL (NO TILT) ======
+        tl.to({}, {
+            duration: 0.6, // Snap scroll
+            onUpdate: function () {
+                try {
+                    const iframe = document.getElementById('siteFrames');
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const progress = this.progress();
+                    const maxScroll = iframeDoc.body.scrollHeight * 0.7;
+                    iframeDoc.documentElement.scrollTop = maxScroll * progress;
+                } catch (e) { }
+            },
+            ease: "expo.out" // Snap ease
+        });
+
+        // RAPID HIGHLIGHTS
+        tl.call(() => {
+            try {
+                const iframe = document.getElementById('siteFrames');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const stdCards = Array.from(iframeDoc.querySelectorAll('.glass-card, .subject-card'));
+
+                stdCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        gsap.to(card, {
+                            y: -20, scale: 1.05, duration: 0.15,
+                            boxShadow: '0 0 70px rgba(34, 211, 238, 0.8)',
+                            borderColor: '#22d3ee',
+                            onComplete: () => {
+                                gsap.to(card, { y: 0, scale: 1, duration: 0.15, boxShadow: '', borderColor: '', delay: 0.05 });
+                            }
+                        });
+                    }, index * 40); // Rapid fire
+                });
+            } catch (e) { }
+        });
+
+        // Instant snap to finale
+        tl.to({}, { duration: 0 });
+
+        // ====== FINALE TRANSITION (Restored Cinematic Zoom) ======
+        // High-impact zoom out while fading logo in
+        tl.to(".browser-window", {
+            scale: 20, // Dramatic zoom
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.in",
+            force3D: true
+        });
+
+        tl.set("#browserScene", { display: 'none' }, "-=0.2");
+        tl.set("#finalLogo", { display: 'flex', opacity: 0, scale: 0.1 }, "-=0.2");
+
+        // Final Logo Reveal
+        tl.to("#finalLogo", {
+            opacity: 1,
+            scale: 1,
+            duration: 1.2,
+            ease: "back.out(1.5)",
+            force3D: true,
+            onStart: () => {
+                // Background shake - more energetic for the landing
+                gsap.to(".stars", { x: 10, yoyo: true, repeat: 8, duration: 0.05 });
+            },
+            onComplete: () => {
+                const url = "https://answervault.great-site.net";
+                const target = document.getElementById('typingUrl');
+                let i = 0;
+                target.innerHTML = '<span class="text-cyan-400">></span> ';
+
+                // Trigger Beta Note earlier
+                gsap.to("#betaNote", { opacity: 1, duration: 1.5, ease: "power2.inOut" });
+
+                const typeInterval = setInterval(() => {
+                    if (i < url.length) {
+                        target.innerHTML += url.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(typeInterval);
+                        target.innerHTML += '<span class="animate-pulse text-cyan-400">_</span>';
+                    }
+                }, 40);
+            }
+        });
+
+    </script>
+</body>
+
+</html>

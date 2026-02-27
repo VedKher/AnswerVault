@@ -1,0 +1,35 @@
+{
+    "name": "Answer Vault - Maharashtra Board Solutions",
+    "short_name": "Answer Vault",
+    "description": "Your one-stop solution for all Maharashtra board exam answers and solutions",
+    "start_url": "/index.html",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#0f1419",
+    "theme_color": "#00d4ff",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "/favicon.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ],
+    "categories": ["education", "productivity"],
+    "screenshots": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "540x720",
+            "type": "image/svg+xml",
+            "form_factor": "narrow"
+        }
+    ]
+}

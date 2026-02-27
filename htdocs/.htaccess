@@ -1,0 +1,22 @@
+RewriteEngine On
+RewriteBase /
+Options -Indexes -MultiViews
+
+# SMART CACHE CONTROL - Fast Load + Instant Updates
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|htm|js|css|php|json|svg)$">
+        # "no-cache" means: save to disk, but CHECK with server before using.
+        # "must-revalidate" ensures the check is absolute.
+        Header set Cache-Control "no-cache, public, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# Protect hidden files/directories
+RewriteRule ^(\.|src) - [F]
+
+# Allow access to existing FILES only
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Redirect everything else to index.php
+RewriteRule ^ index.php [QSA,L]

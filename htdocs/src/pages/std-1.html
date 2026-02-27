@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <title>Standard 1 - Ved Kher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { dark: '#0f1419', darker: '#0a0d12', accent: '#00d4ff', text: '#b0b8c1' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../style.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0a0d12; color: white; overflow-x: hidden; }
+        .glass-nav { background: rgba(15, 20, 25, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    
+    <nav class="fixed w-full z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="../../index.html" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                        📚 Answer Vault
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="../../index.html" class="text-white hover:text-brand-accent transition-colors px-3 py-2 rounded-md font-medium">Home</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 pt-32 pb-20 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold text-center text-white mb-4">
+                Standard <span class="text-brand-accent">1</span>
+            </h1>
+            <p class="text-center text-brand-text mb-16 max-w-2xl mx-auto">Select a subject to view solutions.</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                
+                <a href="std-1/english/english.html" 
+                   class="group relative block p-1 rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-md transition-opacity duration-500"></div>
+                    <div class="relative h-full bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center overflow-hidden min-h-[160px]">
+                        <!-- Glass shine -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <h3 class="text-xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400 group-hover:from-cyan-300 group-hover:to-blue-500 transition-all duration-300">
+                            English
+                        </h3>
+                    </div>
+                </a>
+        
+                <a href="std-1/marathi/marathi.html" 
+                   class="group relative block p-1 rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-md transition-opacity duration-500"></div>
+                    <div class="relative h-full bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center overflow-hidden min-h-[160px]">
+                        <!-- Glass shine -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <h3 class="text-xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400 group-hover:from-cyan-300 group-hover:to-blue-500 transition-all duration-300">
+                            Marathi
+                        </h3>
+                    </div>
+                </a>
+        
+                <a href="std-1/mathematics/mathematics.html" 
+                   class="group relative block p-1 rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-md transition-opacity duration-500"></div>
+                    <div class="relative h-full bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center overflow-hidden min-h-[160px]">
+                        <!-- Glass shine -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <h3 class="text-xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400 group-hover:from-cyan-300 group-hover:to-blue-500 transition-all duration-300">
+                            Mathematics
+                        </h3>
+                    </div>
+                </a>
+        
+                <a href="std-1/evs/evs.html" 
+                   class="group relative block p-1 rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-75 blur-md transition-opacity duration-500"></div>
+                    <div class="relative h-full bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col items-center justify-center overflow-hidden min-h-[160px]">
+                        <!-- Glass shine -->
+                        <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <h3 class="text-xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-br from-white to-gray-400 group-hover:from-cyan-300 group-hover:to-blue-500 transition-all duration-300">
+                            EVS
+                        </h3>
+                    </div>
+                </a>
+        
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-800 bg-brand-dark py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-brand-text">&copy; 2025 Ved Kher. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

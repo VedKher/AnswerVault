@@ -1,0 +1,20 @@
+{
+    "feedback": [
+        {
+            "id": 1,
+            "rating": 5,
+            "message": "Best website in the world",
+            "page": "https:\/\/answervault.great-site.net\/about",
+            "timestamp": "2026-01-03T10:28:10-05:00",
+            "ip": "42.108.236.122"
+        },
+        {
+            "id": 2,
+            "rating": 5,
+            "message": "very good \r\n\ud83d\ude0a",
+            "page": "https:\/\/answervault.great-site.net\/whats-new",
+            "timestamp": "2026-02-24T02:06:20-05:00",
+            "ip": "103.171.133.247"
+        }
+    ]
+}
